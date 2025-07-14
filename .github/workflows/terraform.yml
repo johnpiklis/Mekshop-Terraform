@@ -28,7 +28,7 @@ jobs:
       # name: Clean previous Terraform backend config
       # run: rm -rf .terraform terraform.tfstate*
 
-      name: Terraform Init
+      - name: Terraform Init
         run: terraform init
 
       - name: Terraform Plan
