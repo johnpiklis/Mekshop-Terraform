@@ -37,9 +37,9 @@ jobs:
       - name: Terraform format
         run: terraform format -var="my_ip=${{ vars.MY_PUBLIC_IP }}"
 
-      # - name: Terraform Apply
-      # - if: github.ref == 'refs/heads/master'
-      #   run: terraform apply -auto-approve -var="my_ip=${{ vars.MY_PUBLIC_IP }}"
+      - name: Terraform Apply
+      - if: github.ref == 'refs/heads/master'
+        run: terraform apply -auto-approve -var="my_ip=${{ vars.MY_PUBLIC_IP }}"
 
       # - name: Terraform Destroy
       #  run: terraform destroy -auto-approve -var="my_ip=${{ vars.MY_PUBLIC_IP }}"
