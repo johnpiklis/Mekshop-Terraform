@@ -1,0 +1,45 @@
+# .github/workflows/terraform.yml
+name: MekShop Terraform
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  terraform:
+    name: Terraform Plan & Apply
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      # name: Clean previous Terraform backend config
+      # run: rm -rf .terraform terraform.tfstate*
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -var="my_ip=${{ vars.MY_PUBLIC_IP }}"
+        
+      - name: Terraform format
+        run: terraform format -var="my_ip=${{ vars.MY_PUBLIC_IP }}"
+
+      - name: Terraform Apply
+      - if: github.ref == 'refs/heads/master'
+        run: terraform apply -auto-approve -var="my_ip=${{ vars.MY_PUBLIC_IP }}"
+
+      # - name: Terraform Destroy
+      #  run: terraform destroy -auto-approve -var="my_ip=${{ vars.MY_PUBLIC_IP }}"
